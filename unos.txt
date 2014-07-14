@@ -1,0 +1,177 @@
+insert into ambalaza ("naziv", "zapremnina", "kolicina") VALUES
+('Staklena velika', 1, 450),
+('Staklena srednja', 0.75, 600),
+('Staklena mala', 0.25, 330);
+
+insert into ekoloskipreparati ("naziv", "opis") values
+('autoktoni kvasci','kontrola sumpornog dioksida'),
+('ekstrakt rotkve', 'kontrola SO2'),
+('bakterije mlijeèno-kiselog vrenja', 'otkiseljavanje'),
+('kalijev karbonat', 'otkiseljavanje'),
+('kalcijev karbonat', 'otkiseljavanje'),
+('želatina', 'bistrenje'),
+('riblji mjehur', 'bistrenje'),
+('aktivni ugljen', 'popravljanje arome'),
+('limunska kiselina', 'popravljanje arome'),
+('pektolitièki enzimi', 'popravljanje arome');
+
+insert into sorta ("naziv") values 
+('Chardonnay'),
+('Silvanac zeleni'),
+('Pinot sivi'),
+('Graševina'),
+('Traminac'),
+('Cabernet Souvignon'),
+('Frankovka');
+
+insert into uvjeti ("naziv") VALUES
+('toplina do 40 stupnjeva'),
+('bistroæa'),
+('zadovoljavajuæa kiselost'),
+('sumporastu kiselinu smanjiti na 2/3 propisane kolièine u zakonu u vinu'),
+('kalijev metabisulfitsmanjiti na 2/3 propisane kolièine u zakonu u vinu');
+
+
+insert into vinograd ("naziv", "velicina","brojTrsa", "mjesto", "polozaj") VALUES
+('Vinograd 1', 14.5, 1800, 'Šarengrad', 'Na ulazu iz smjera Vukovara'),
+('Vinograd 2', 7, 950, 'Ilok', 'Iza principovca'),
+('Vinograd 3', 20, 2700, 'Opatovac', 'Izmeðu Sotina i Opatovca sa desne strane');
+
+insert into vrstabacve ("opis") values
+('inox tank'),
+('okrugla baèva'),
+('valjkasta posuda'),
+('drvena stožasta kaca');
+ 
+insert into vrsteodrzavanja ("naziv", "opis") values
+('košnja', 'košenje vinograda i okolice'),
+('rezidba', 'rezanje èokota'),
+('zimska zaštita', 'prskanje na bazi bakra'),
+('prskanje vinograda', 'prskanje vinove loze zbog zaštite od nametnika');
+
+insert into korisnici ("ime", "prezime" , "korisnickoIme", "lozinka" , "uloga") values
+('Matej', 'Groznica', 'mgroznic', '123456', 1),
+('Tajana', 'Gašpariæ', 'tgaspari', '21101992', 1),
+('Ivana', 'Završki', 'izavrski', '123456', 1),
+('Ivica', 'Arbanas', 'iarbanas', '123456', 1),
+('admin', 'admin', 'admin', '123456', 1);
+
+insert into bacveprazne ("zapremina" ,"VrstaBacve_idVrstaBacve" ) values
+(500, 1),
+(500, 1),
+(500, 2),
+(250, 3),
+(250, 4),
+(1000, 1),
+(20000,1),
+(20000,1),
+(20000,1),
+(20000,1),
+(20000,1),
+(20000,1);
+
+insert into vinograd_has_sorta ("Vinograd_idVinograd" , "Sorta_idSorta" , "broj_cokota") values 
+(1,1,1000),
+(1,2,500),
+(1,4,300),
+(2,7,950),
+(3,6,900),
+(3,3,900),
+(3,5,900);
+
+insert into berba ("datum", "vrijeme", "ocekivanaKolicina", "slador", "vinogradSorta") values
+('20120618 10:34:09 AM', 'suncano', 15555, 3.5, 1),
+('20120619 10:34:09 AM', 'suncano', 14000, 3.5, 2),
+('20120617 10:34:09 AM', 'suncano', 13000, 3.5, 3),
+('20120614 10:34:09 AM', 'suncano', 16000, 3.5, 4),
+('20120613 10:34:09 AM', 'suncano', 14000, 3.5, 6),
+('20120615 10:34:09 AM', 'suncano', 13000, 3.5, 5);
+
+insert into dobivenimasulj ("kolicina", "Berba_idBerba" ) values
+(15000, 2),
+(12561, 3),
+(14896, 1), 
+(10862, 4),
+(15267, 5),
+(10895, 6);
+
+insert into bacva ("kolicina" , "DobiveniMasulj_idDobiveniMasulj", "BacvePrazne_idBacvePrazne" ) values
+(15000, 2,6),
+(12561, 3,5),
+(14896, 1,3), 
+(10862, 4,4),
+(15267, 5,2),
+(10895, 6,1);
+
+insert into dozrijevanjevina ("biljeske", "Bacva_idBacva") values
+('super', 1),
+('super', 2),
+('super', 3),
+('odlièno', 4),
+('super', 5),
+('super', 6);
+
+insert into vino ("godina", "kolicina" ,"DozrijevanjeVina_idDozrijevanjeVina" ) values
+(2011,15000, 1),
+(2011,12561, 2),
+(2012,14896, 3), 
+(2012,10862, 4),
+(2012,15267, 5),
+(2013,10895, 6);
+
+insert into dozrijevanjevina_has_ekoloskipreparati ("DozrijevanjeVina_idDozrijevanjeVina", "EkoloskiPreparati_idEkoloskiPreparati", "Kolicina")
+values
+(1,1,5),
+(2,2,1),
+(3,1,4),
+(4,1,4),
+(5,2,3),
+(6,3,4);
+
+insert into pretok ("datum" , "kolicina", "Vino_idVino") values
+('20120618 10:34:09 AM',15000, 1),
+( '20120618 10:54:09 AM',12561, 2),
+( '20120618 10:14:09 AM',14896, 3), 
+( '20120618 11:34:09 AM',10862, 4),
+( '20120618 02:34:09 PM',15267, 5),
+( '20120618 04:34:59 PM' ,10895, 6);
+
+insert into vinoubacvama ("kolicina" , "pretok", "bacva") values
+(15000,1, 12),
+(12561,2, 8),
+(14896,3, 9), 
+(10862,4, 10),
+(15267,5, 11),
+(10895, 6, 8);
+
+insert into odrzavanje ("datum" , "opis", "Vinograd_idVinograd") values 
+('20120619 10:34:09 AM', 'špricanje', 1),
+('20120518 10:34:09 AM',  'špricanje', 2),
+('20120614 10:34:09 AM', 'špricanje', 3);
+
+insert into punjenje ("datum", "kolicina", "VinouBacvama_idVinouBacvama", "Ambalaza_idAmbalaza") values
+('20120619 10:34:09 AM', 1, 1,1),
+('20120619 10:34:09 AM', 51, 2,2),
+('20120619 10:34:09 AM', 111, 4,2),
+('20120619 10:34:09 AM', 1, 1,3),
+('20120619 10:34:09 AM', 150, 5,3);
+
+insert into uvjeti_has_dozrijevanjevina ("Uvjeti_idUvjeti" , "DozrijevanjeVina_idDozrijevanjeVina" , "Napomena" ) values
+(1, 1, 'OK'),
+(1, 2, 'OK'),
+(1, 3, 'OK'),
+(1, 4, 'OK'),
+(1, 5, 'OK'),
+(3, 1, 'Smanji kiselost'); 
+
+
+
+insert into vrsteodrzavanja_has_odrzavanje ("VrsteOdrzavanja_idVrsteOdrzavanja", "Odrzavanje_idOdrzavanje", "Napomena" ) values
+(1,1,'Dobro prošlo'),
+(1,2,'Dobro prošlo'),
+(1,3,'Treba ponoviti');
+
+
+
+
+

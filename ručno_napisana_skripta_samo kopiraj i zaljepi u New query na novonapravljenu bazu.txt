@@ -1,0 +1,170 @@
+CREATE TABLE "ambalaza" (
+  "idAmbalaza" int IDENTITY(1,1) NOT NULL,
+  "naziv" varchar(50) NOT NULL,
+  "zapremnina" float NOT NULL,
+  "kolicina" int not null,	
+  PRIMARY KEY ("idAmbalaza")
+);
+
+
+CREATE TABLE "ekoloskipreparati" (
+  "idEkoloskiPreparati" int IDENTITY(1,1) NOT NULL,
+  "naziv" varchar(50) NOT NULL,
+  "opis" varchar(255) DEFAULT NULL,
+  PRIMARY KEY ("idEkoloskiPreparati")
+);
+
+CREATE TABLE "sorta" (
+  "idSorta" int IDENTITY(1,1) NOT NULL,
+  "naziv" varchar(50) NOT NULL,
+  PRIMARY KEY ("idSorta")
+);
+
+CREATE TABLE "uvjeti" (
+  "idUvjeti" int IDENTITY(1,1) NOT NULL,
+  "naziv" text not null,
+  PRIMARY KEY ("idUvjeti")
+);
+
+CREATE TABLE "vinograd" (
+  "idVinograd" int IDENTITY(1,1) NOT NULL,
+  "naziv" varchar(50) NOT NULL,
+  "velicina" float NOT NULL,
+  "brojTrsa" int DEFAULT NULL,
+  "mjesto" varchar(255) DEFAULT NULL,
+  "polozaj" varchar(50) DEFAULT NULL,
+  PRIMARY KEY ("idVinograd")
+);
+
+CREATE TABLE "vrstabacve" (
+  "idVrstaBacve" int IDENTITY(1,1) NOT NULL,
+  "opis" varchar(50) NOT NULL,
+  PRIMARY KEY ("idVrstaBacve")
+);
+
+CREATE TABLE "vrsteodrzavanja" (
+  "idVrsteOdrzavanja" int IDENTITY(1,1) NOT NULL,
+  "naziv" varchar(50) NOT NULL,
+  "opis" varchar(255) DEFAULT NULL,
+  PRIMARY KEY ("idVrsteOdrzavanja")
+);
+
+CREATE TABLE "korisnici" (
+  "idKorisnici" int IDENTITY(1,1) NOT NULL,
+  "ime" varchar(50) NOT NULL,
+  "prezime" varchar(50) NOT NULL,
+  "korisnickoIme" varchar(50) NOT NULL,
+  "lozinka" int NOT NULL,
+  "uloga" int NOT NULL,
+  "Vinograd_idVinograd" int DEFAULT NULL REFERENCES "vinograd" ("idVinograd") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idKorisnici")
+);
+
+CREATE TABLE "bacveprazne" (
+  "idBacvePrazne" int IDENTITY(1,1) NOT NULL,
+  "zapremina" float NOT NULL,
+  "VrstaBacve_idVrstaBacve" int NOT NULL REFERENCES "vrstabacve" ("idVrstaBacve") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idBacvePrazne")
+);
+
+CREATE TABLE "vinograd_has_sorta" (
+  "sifra" int IDENTITY(1,1) NOT NULL,
+  "Vinograd_idVinograd" int NOT NULL REFERENCES "vinograd" ("idVinograd") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Sorta_idSorta" int NOT NULL REFERENCES "sorta" ("idSorta") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "broj_cokota" int NOT NULL,
+  PRIMARY KEY ("sifra")
+);
+
+CREATE TABLE "berba" ( 
+  "idBerba" int IDENTITY(1,1) NOT NULL,
+  "datum" datetime DEFAULT NULL,
+  "vrijeme" varchar(50) NOT NULL,
+  "ocekivanaKolicina" float DEFAULT NULL,
+  "slador" float DEFAULT NULL,
+  "vinogradSorta" int NOT NULL REFERENCES "vinograd_has_sorta" ("sifra") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idBerba")
+);
+
+CREATE TABLE "dobivenimasulj" (
+  "idDobiveniMasulj" int IDENTITY(1,1) NOT NULL,
+  "kolicina" float NOT NULL,
+  "Berba_idBerba" int NOT NULL REFERENCES "berba" ("idBerba") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idDobiveniMasulj")
+);
+
+CREATE TABLE "bacva" (
+  "idBacva" int IDENTITY(1,1) NOT NULL,
+  "kolicina" float NOT NULL,
+  "DobiveniMasulj_idDobiveniMasulj" int NOT NULL REFERENCES "dobivenimasulj" ("idDobiveniMasulj") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "BacvePrazne_idBacvePrazne" int NOT NULL REFERENCES "bacveprazne" ("idBacvePrazne") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idBacva")
+);
+
+CREATE TABLE "dozrijevanjevina" (
+  "idDozrijevanjeVina" int IDENTITY(1,1) NOT NULL,
+  "biljeske" varchar(255) DEFAULT NULL,
+  "Bacva_idBacva" int NOT NULL REFERENCES "bacva" ("idBacva") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idDozrijevanjeVina")
+);
+
+CREATE TABLE "vino" (
+  "idVino" int IDENTITY(1,1) NOT NULL,
+  "godina" int DEFAULT NULL,
+  "kolicina" float NOT NULL,
+  "DozrijevanjeVina_idDozrijevanjeVina" int NOT NULL REFERENCES "dozrijevanjevina" ("idDozrijevanjeVina") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idVino")
+);
+
+CREATE TABLE "dozrijevanjevina_has_ekoloskipreparati" (
+  "DozrijevanjeVina_idDozrijevanjeVina" int NOT NULL REFERENCES "dozrijevanjevina" ("idDozrijevanjeVina") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "EkoloskiPreparati_idEkoloskiPreparati" int NOT NULL REFERENCES "ekoloskipreparati" ("idEkoloskiPreparati") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Kolicina" float NOT NULL,
+  PRIMARY KEY ("DozrijevanjeVina_idDozrijevanjeVina","EkoloskiPreparati_idEkoloskiPreparati")
+);
+
+CREATE TABLE "pretok" (
+  "idPretok" int IDENTITY(1,1) NOT NULL,
+  "datum" datetime DEFAULT NULL,
+  "kolicina" int DEFAULT NULL,
+  "Vino_idVino" int NOT NULL REFERENCES "vino" ("idVino") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idPretok")
+);
+
+CREATE TABLE "vinoubacvama" (
+  "idVinouBacvama" int IDENTITY(1,1) NOT NULL,
+  "kolicina" int DEFAULT NULL,
+  "pretok" int NOT NULL REFERENCES "pretok" ("idPretok") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "bacva" int NOT NULL REFERENCES "bacveprazne" ("idBacvePrazne") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idVinouBacvama")
+);
+
+CREATE TABLE "odrzavanje" (
+  "idOdrzavanje" int IDENTITY(1,1) NOT NULL,
+  "datum" datetime NOT NULL,
+  "opis" varchar(255) NOT NULL,
+  "Vinograd_idVinograd" int NOT NULL REFERENCES "vinograd" ("idVinograd") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idOdrzavanje")
+);
+
+CREATE TABLE "punjenje" (
+  "idPunjenje" int IDENTITY(1,1) NOT NULL,
+  "datum" datetime DEFAULT NULL,
+  "kolicina" float not null,
+  "VinouBacvama_idVinouBacvama" int NOT NULL REFERENCES "vinoubacvama" ("idVinouBacvama") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Ambalaza_idAmbalaza" int NOT NULL REFERENCES "ambalaza" ("idAmbalaza") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY ("idPunjenje")
+);
+
+CREATE TABLE "uvjeti_has_dozrijevanjevina" (
+  "Uvjeti_idUvjeti" int NOT NULL REFERENCES "uvjeti" ("idUvjeti") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "DozrijevanjeVina_idDozrijevanjeVina" int NOT NULL REFERENCES "dozrijevanjevina" ("idDozrijevanjeVina") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Napomena" VARCHAR(255),
+  PRIMARY KEY ("Uvjeti_idUvjeti","DozrijevanjeVina_idDozrijevanjeVina"),
+);
+
+CREATE TABLE "vrsteodrzavanja_has_odrzavanje" (
+  "VrsteOdrzavanja_idVrsteOdrzavanja" int NOT NULL REFERENCES "vrsteodrzavanja" ("idVrsteOdrzavanja") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Odrzavanje_idOdrzavanje" int NOT NULL REFERENCES "odrzavanje" ("idOdrzavanje") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  "Napomena" VARCHAR(255),
+  PRIMARY KEY ("VrsteOdrzavanja_idVrsteOdrzavanja","Odrzavanje_idOdrzavanje")
+);
